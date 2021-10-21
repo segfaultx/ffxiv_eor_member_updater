@@ -113,7 +113,7 @@ def get_character_id(character_name: str):
     """Help method to get the ID of an character via XIV API"""
     current_request_url: str = f"{BASE_URL_XIV_API_CHARACTER}search?name={character_name}&server=Moogle"
     resp_json: dict = do_http_get(current_request_url)
-    print(character_name)
+    print(f"Processing data for: {character_name}")
     return resp_json["Results"][0]["ID"] if resp_json["Results"] else None
 
 
