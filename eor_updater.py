@@ -31,17 +31,20 @@ def main(filepath):
         update_character_info(current_character_info, worksheet, class_range, worksheet[worksheet.min_row], i)
 
     workbook.save(filepath.replace(".xlsx", "_updated.xlsx"))
+    print("Finished!")
 
 
 def update_character_info(current_character_info: dict, worksheet: openpyxl.workbook.workbook.Worksheet,
                           class_range: tuple, header_row: tuple, current_row: int):
     """method to update the character class information in the excel sheet"""
     for i in range(class_range[0], class_range[1]):
-        mapped_class_name = GERMAN_TO_ENGLISH_CLASS_DICT.get(header_row[i].value)
+        # reduce i by one because column index is the actual index, while the header_row is a list,
+        # thus reducing the index by 1
+        mapped_class_name = GERMAN_TO_ENGLISH_CLASS_DICT.get(header_row[i - 1].value)
         new_class_val = current_character_info.get(mapped_class_name, 0)
         if DEBUG_ENABLED:
             character_name = f"{worksheet.cell(current_row, 1).value} {worksheet.cell(current_row, 2).value}"
-            current_class = header_row[i].value
+            current_class = header_row[i - 1].value
             print(f"Setting value {new_class_val} for class {current_class} for character {character_name}")
         current_cell = worksheet.cell(row=current_row, column=i)
         current_cell.value = new_class_val
@@ -118,8 +121,8 @@ def load_config(arguments: argparse.Namespace):
 
     if arguments.config:
         CONFIG_LOCATION = arguments.config
-    if arguments.debug:
-        DEBUG_ENABLED = arguments.debug
+    if arguments.d:
+        DEBUG_ENABLED = arguments.d
 
     with open(os.path.join(CONFIG_LOCATION, "eor_config.json")) as file:
         config = json.load(file)
