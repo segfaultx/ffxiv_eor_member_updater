@@ -1,0 +1,33 @@
+{
+  "class_config": {
+    "Paladin": "Paladin",
+    "Krieger": "Warrior",
+    "Dunkelritter": "Dark Knight",
+    "Revolverklinge": "Gunbreaker",
+    "Weißmagier": "White Mage",
+    "Gelehrter": "Scholar",
+    "Astrologe": "Astrologian",
+    "Mönch": "Monk",
+    "Dragoon": "Dragoon",
+    "Ninja": "Ninja",
+    "Samurai": "Samurai",
+    "Barde": "Bard",
+    "Maschinist": "Machinist",
+    "Tänzer": "Dancer",
+    "Schwarzmagier": "Black Mage",
+    "Beschwörer": "Summoner",
+    "Rotmagier": "Red Mage",
+    "Blaumagier": "Blue Mage (Limited Job)",
+    "Zimmerer": "Carpenter",
+    "Grobschmied": "Blacksmith",
+    "Plattner": "Armorer",
+    "Goldschmied": "Goldsmith",
+    "Gerber": "Leatherworker",
+    "Weber": "Weaver",
+    "Alchemist": "Alchemist",
+    "Mienenarbeiter": "Miner",
+    "Gärtner": "Botanist",
+    "Fischer": "Fisher",
+    "Gourmet": "Culinarian"
+  }
+}

@@ -1,38 +1,15 @@
 #!/usr/bin/python3
+import os.path
 
 import openpyxl
 import requests
+import json
+import sys
 
 BASE_URL_XIV_API_CHARACTER: str = "https://xivapi.com/character/"
-GERMAN_TO_ENGLISH_CLASS_DICT: dict = {"Paladin": "Paladin",
-                                      "Krieger": "Warrior",
-                                      "Dunkelritter": "Dark Knight",
-                                      "Revolverklinge": "Gunbreaker",
-                                      "Weißmagier": "White Mage",
-                                      "Gelehrter": "Scholar",
-                                      "Astrologe": "Astrologian",
-                                      "Mönch": "Monk",
-                                      "Dragoon": "Dragoon",
-                                      "Ninja": "Ninja",
-                                      "Samurai": "Samurai",
-                                      "Barde": "Bard",
-                                      "Maschinist": "Machinist",
-                                      "Tänzer": "Dancer",
-                                      "Schwarzmagier": "Black Mage",
-                                      "Beschwörer": "Summoner",
-                                      "Rotmagier": "Red Mage",
-                                      "Blaumagier": "Blue Mage (Limited Job)",
-                                      "Zimmerer": "Carpenter",
-                                      "Grobschmied": "Blacksmith",
-                                      "Plattner": "Armorer",
-                                      "Goldschmied": "Goldsmith",
-                                      "Gerber": "Leatherworker",
-                                      "Weber": "Weaver",
-                                      "Alchemist": "Alchemist",
-                                      "Mienenarbeiter": "Miner",
-                                      "Gärtner": "Botanist",
-                                      "Fischer": "Fisher",
-                                      "Gourmet": "Culinarian"}
+GERMAN_TO_ENGLISH_CLASS_DICT: dict = {}
+
+CONFIG_LOCATION = os.getcwd()
 DEBUG_ENABLED = False
 
 
@@ -104,7 +81,7 @@ def generate_class_range(worksheet: openpyxl.workbook.workbook.Worksheet):
         print("CLASS ROW RANGES:")
         print(start, end)
 
-    return start, end
+    return start + 1, end
 
 
 def do_http_get(request_url: str):
@@ -133,5 +110,15 @@ def get_character_id(character_name: str):
     return resp_json["Results"][0]["ID"] if resp_json["Results"] else None
 
 
+def load_config():
+    global GERMAN_TO_ENGLISH_CLASS_DICT
+    with open(os.path.join(CONFIG_LOCATION, "eor_config.json")) as file:
+        config = json.load(file)
+        GERMAN_TO_ENGLISH_CLASS_DICT = config.get("class_config", None)
+        if not GERMAN_TO_ENGLISH_CLASS_DICT:
+            raise IOError
+
+
 if __name__ == '__main__':
+    load_config()
     main()
