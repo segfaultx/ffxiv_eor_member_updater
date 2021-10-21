@@ -28,6 +28,8 @@
     "Mienenarbeiter": "Miner",
     "Gärtner": "Botanist",
     "Fischer": "Fisher",
-    "Gourmet": "Culinarian"
+    "Gourmet": "Culinarian",
+    "Schnitter": "Reaper",
+    "Weiser": "Sage"
   }
 }
