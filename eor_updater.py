@@ -8,6 +8,7 @@ import argparse
 
 BASE_URL_XIV_API_CHARACTER: str = "https://xivapi.com/character/"
 GERMAN_TO_ENGLISH_CLASS_DICT: dict = {}
+SUB_30_MAPPING_DICT: dict = {}
 
 CONFIG_LOCATION = os.getcwd()
 DEBUG_ENABLED = False
@@ -58,8 +59,10 @@ def process_class_info(class_info: dict):
     data_to_process = class_info.get("Character", {}).get("ClassJobs", None)
     if not data_to_process:
         raise IOError
-    out: dict = {entry["UnlockedState"]["Name"]: entry["Level"] for entry in data_to_process}
-
+    out: dict = {SUB_30_MAPPING_DICT.get(entry["UnlockedState"]["Name"], entry["UnlockedState"]["Name"]): entry["Level"]
+                 for entry in data_to_process}
+    # special case -> arcanist branching into two main jobs
+    out["Summoner"] = out["Scholar"]
     if DEBUG_ENABLED:
         print("MAPPED CLASS VALUES:")
         print(out)
@@ -115,9 +118,8 @@ def get_character_id(character_name: str):
 
 
 def load_config(arguments: argparse.Namespace):
-    global GERMAN_TO_ENGLISH_CLASS_DICT
-    global CONFIG_LOCATION
-    global DEBUG_ENABLED
+    global GERMAN_TO_ENGLISH_CLASS_DICT, SUB_30_MAPPING_DICT
+    global CONFIG_LOCATION, DEBUG_ENABLED
 
     if arguments.config:
         CONFIG_LOCATION = arguments.config
@@ -127,7 +129,8 @@ def load_config(arguments: argparse.Namespace):
     with open(os.path.join(CONFIG_LOCATION, "eor_config.json")) as file:
         config = json.load(file)
         GERMAN_TO_ENGLISH_CLASS_DICT = config.get("class_config", None)
-        if not GERMAN_TO_ENGLISH_CLASS_DICT:
+        SUB_30_MAPPING_DICT = config.get("sub_30_class_config", None)
+        if not GERMAN_TO_ENGLISH_CLASS_DICT or not SUB_30_MAPPING_DICT:
             raise IOError
 
 

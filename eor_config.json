@@ -31,5 +31,16 @@
     "Gourmet": "Culinarian",
     "Schnitter": "Reaper",
     "Weiser": "Sage"
+  },
+  "sub_30_class_config": {
+    "Pugilist": "Monk",
+    "Marauder": "Warrior",
+    "Thief": "Ninja",
+    "Gladiator": "Paladin",
+    "Conjurer": "White Mage",
+    "Arcanist": "Scholar",
+    "Archer": "Bard",
+    "Lancer": "Dragoon",
+    "Thaumaturge": "Black Mage"
   }
 }
