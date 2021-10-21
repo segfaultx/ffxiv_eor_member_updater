@@ -4,7 +4,7 @@ import os.path
 import openpyxl
 import requests
 import json
-import sys
+import argparse
 
 BASE_URL_XIV_API_CHARACTER: str = "https://xivapi.com/character/"
 GERMAN_TO_ENGLISH_CLASS_DICT: dict = {}
@@ -13,10 +13,10 @@ CONFIG_LOCATION = os.getcwd()
 DEBUG_ENABLED = False
 
 
-def main():
+def main(filepath):
     """main method, used to process data and update the excel workbook"""
 
-    workbook: openpyxl.Workbook = openpyxl.load_workbook("/home/amatus/Downloads/Mitgliederliste_empty.xlsx")
+    workbook: openpyxl.Workbook = openpyxl.load_workbook(filepath)
     worksheet = workbook.active
     class_range: tuple = generate_class_range(worksheet)
     for i in range(worksheet.min_row + 1, worksheet.max_row):
@@ -29,7 +29,8 @@ def main():
             print(f"Cant process data for character: {current_character_name}")
             continue
         update_character_info(current_character_info, worksheet, class_range, worksheet[worksheet.min_row], i)
-    workbook.save("/home/amatus/Downloads/Mitgliederliste_updated.xlsx")
+
+    workbook.save(filepath.replace(".xlsx", "_updated.xlsx"))
 
 
 def update_character_info(current_character_info: dict, worksheet: openpyxl.workbook.workbook.Worksheet,
@@ -81,7 +82,7 @@ def generate_class_range(worksheet: openpyxl.workbook.workbook.Worksheet):
         print("CLASS ROW RANGES:")
         print(start, end)
 
-    return start + 1, end
+    return start + 1, end + 1
 
 
 def do_http_get(request_url: str):
@@ -110,8 +111,16 @@ def get_character_id(character_name: str):
     return resp_json["Results"][0]["ID"] if resp_json["Results"] else None
 
 
-def load_config():
+def load_config(arguments: argparse.Namespace):
     global GERMAN_TO_ENGLISH_CLASS_DICT
+    global CONFIG_LOCATION
+    global DEBUG_ENABLED
+
+    if arguments.config:
+        CONFIG_LOCATION = arguments.config
+    if arguments.debug:
+        DEBUG_ENABLED = arguments.debug
+
     with open(os.path.join(CONFIG_LOCATION, "eor_config.json")) as file:
         config = json.load(file)
         GERMAN_TO_ENGLISH_CLASS_DICT = config.get("class_config", None)
@@ -120,5 +129,10 @@ def load_config():
 
 
 if __name__ == '__main__':
-    load_config()
-    main()
+    parser = argparse.ArgumentParser(description="Process the EoR Membership excel.")
+    parser.add_argument("--filename", metavar='[path to file]', type=str, help="the location of the file to process")
+    parser.add_argument("--config", type=str, required=False)
+    parser.add_argument("--d", required=False, action='store_true')
+    args = parser.parse_args()
+    load_config(args)
+    main(args.filename)
