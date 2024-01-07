@@ -1,2 +1,2 @@
 @echo off
-python eor_updater.py --filename Mitgliederliste.xlsx
+start eor_member_updater.exe
