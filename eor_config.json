@@ -17,7 +17,7 @@
     "Schwarzmagier": "Black Mage",
     "Beschwörer": "Summoner",
     "Rotmagier": "Red Mage",
-    "Blaumagier": "Blue Mage (Limited Job)",
+    "Blaumagier": "Blue Mage",
     "Zimmerer": "Carpenter",
     "Grobschmied": "Blacksmith",
     "Plattner": "Armorer",
@@ -35,12 +35,14 @@
   "sub_30_class_config": {
     "Pugilist": "Monk",
     "Marauder": "Warrior",
-    "Thief": "Ninja",
+    "Rogue": "Ninja",
     "Gladiator": "Paladin",
     "Conjurer": "White Mage",
     "Arcanist": "Scholar",
     "Archer": "Bard",
     "Lancer": "Dragoon",
     "Thaumaturge": "Black Mage"
-  }
+  },
+  "world": "Moogle",
+  "data_center": "Chaos"
 }
