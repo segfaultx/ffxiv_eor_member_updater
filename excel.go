@@ -49,6 +49,8 @@ func ProcessExcel(filename string) {
 		updateCharacterData(f, characterInfo, index+2, activeSheetName) // add 2 to start at row 2, skipping the header row
 	}
 
+	err = f.Save()
+
 	if err != nil {
 		log.Fatalln(err)
 	}
