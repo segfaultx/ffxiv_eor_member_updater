@@ -37,7 +37,7 @@ func GetCharacterId(characterName string) (uint32, error) {
 				return character.ID, nil
 			}
 		case <-timeout:
-			return 0, errors.New(fmt.Sprintf("No Character with Name " + characterName + "%s found"))
+			return 0, errors.New(fmt.Sprintf("No Character with Name %s found", characterName))
 		}
 	}
 }
