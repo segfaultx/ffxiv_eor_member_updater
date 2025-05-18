@@ -2,9 +2,11 @@ package main
 
 import (
 	"errors"
+	"fmt"
 	"github.com/karashiiro/bingode"
 	"github.com/xivapi/godestone/v2"
 	"log"
+	"time"
 )
 
 var (
@@ -23,16 +25,21 @@ func GetCharacterId(characterName string) (uint32, error) {
 	}
 
 	result := Scraper.SearchCharacters(searchOptions)
+	timeout := time.After(time.Second * 30)
 
-	for character := range result {
-		if character.Error != nil {
-			log.Fatalln(character.Error)
+	for {
+		select {
+		case character := <-result:
+			{
+				if character.Error != nil {
+					log.Fatalln(character.Error)
+				}
+				return character.ID, nil
+			}
+		case <-timeout:
+			return 0, errors.New(fmt.Sprintf("No Character with Name " + characterName + "%s found"))
 		}
-
-		return character.ID, nil
 	}
-
-	return 0, errors.New("No Character with Name " + characterName + " found")
 }
 
 func GetCharacterInfo(characterId uint32) *godestone.Character {
